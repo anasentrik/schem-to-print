@@ -1,48 +1,77 @@
-# Schem Printer (Fabric, Minecraft 26.3)
+# Schem Printer
 
-Taruh file `.schem` di folder, ketik command, patung muncul di DEPAN lo (muka ngadep ke lo, ikut arah hadap lo).
-Ada mode print 3D (animasi), paste instan, pause, dan **undo beneran** (balikin blok asli, bukan jadi air).
+A Fabric mod for Minecraft 26.3 that builds a `.schem` file right in front of you, facing you.
+Watch it "3D-print" block by block, or paste it instantly. Pause, resume, and **real undo**
+(restores the original blocks, not just air) are built in.
 
-## Build
-Butuh JDK 25.
+## Features
+- **Print mode**: animated build with 4 directions (bottom-up, left-to-right, right-to-left, middle-out)
+- **Paste mode**: places everything as fast as the server can safely handle (split across ticks, no freeze)
+- **Pause / resume / stop** at any time
+- **Undo** that restores the original blocks, saved to disk so it still works after restarting the game
+- The build is placed in front of you and rotated to face you, including stairs, doors, etc.
 
-1. Pastikan ada Gradle wrapper. Paling gampang: download template resmi dari
-   https://fabricmc.net/develop/template/ (pilih Minecraft 26.3), lalu copy `gradlew`, `gradlew.bat`,
-   dan folder `gradle/` dari template ke folder ini. (Atau: `gradle wrapper --gradle-version 9.6.0`)
-2. `./gradlew build`
-3. Hasilnya: `build/libs/schem-printer-2.0.0.jar` (BUKAN yang `-sources`).
+## Requirements
+- Minecraft 26.3
+- Fabric Loader 0.19.5+
+- Fabric API
+- Java 25
 
-Kalau Gradle protes soal versi plugin/Loom, samain `gradle.properties` dan `build.gradle` dengan template resmi 26.3.
+## Installation
+1. Put `schem-printer-2.0.0.jar` in your `mods` folder.
+2. Put your `.schem` files in `.minecraft/schematics/`.
+   Want to use another folder (e.g. the WorldEdit folder)? Change `schematics_dir` in `config/schemprinter.properties`.
 
-## Pasang
-- Fabric Loader 0.19.5+, Fabric API `0.161.0+26.3`, lalu taruh `schem-printer-2.0.0.jar` di folder `mods`.
-- Taruh file `.schem` di `<folder game>/schematics/` (`.minecraft/schematics`).
-  Mau pakai folder lain (misal folder WorldEdit)? Ubah `schematics_dir` di `config/schemprinter.properties`.
+Supported format: Sponge Schematic v2 / v3 (`.schem`, as exported by WorldEdit).
 
-## Command (cheat/OP aktif)
-| Command | Fungsi |
+## Commands
+| Command | Description |
 |---|---|
-| `/schem list` | daftar schematic |
-| `/schem print <nama> [air]` | print 3D, layer bawah -> atas |
-| `/schem print <nama> left [air]` | print dari sisi kiri -> kanan (per irisan vertikal) |
-| `/schem print <nama> right [air]` | print dari sisi kanan -> kiri |
-| `/schem print <nama> middle [air]` | print dari tengah, nyebar ke kiri & kanan barengan |
-| `/schem print <nama> bottom [air]` | sama kayak tanpa mode (bawah -> atas) |
-| `/schem paste <nama> [air]` | paste (secepat yang aman buat server, dipecah per tick) |
-| `/schem pause` / `/schem resume` | pause dan lanjut |
-| `/schem stop` | berhenti, hasil yang udah jadi dibiarin |
-| `/schem undo` | balikin kondisi asli (kalau lagi print: dibatalin lalu dibalikin) |
-| `/schem status` | status |
-| `/schem speed <n>` | blok per tick buat mode print (default 40) |
-| `/schem distance <n>` | jarak lo ke patung (default 3) |
-| `/schem face <north/east/south/west>` | sisi file schematic yang jadi MUKA patung (default south) |
+| `/schem list` | List available schematics |
+| `/schem print <name> [air]` | Animated build, bottom to top |
+| `/schem print <name> bottom [air]` | Same as above |
+| `/schem print <name> left [air]` | Animated build, left side to right side |
+| `/schem print <name> right [air]` | Animated build, right side to left side |
+| `/schem print <name> middle [air]` | Animated build, from the center outward to both sides at once |
+| `/schem paste <name> [air]` | Instant paste |
+| `/schem pause` / `/schem resume` | Pause / resume the current build |
+| `/schem stop` | Stop; blocks already placed stay |
+| `/schem undo` | Restore the original blocks (if a build is running, it is cancelled first) |
+| `/schem status` | Show progress and settings |
+| `/schem speed <n>` | Blocks per tick in print mode (default 40) |
+| `/schem distance <n>` | Distance between you and the build (default 3) |
+| `/schem face <north/east/south/west>` | Which side of the schematic file is the front (default south) |
 
-Kiri/kanan = dilihat dari posisi lo waktu ngetik command (ngadep patung). Tiap irisan tetap dicetak bawah -> atas.
+- **Left / right** is from your point of view when you run the command (looking at the build).
+  Each vertical slice is still built from bottom to top.
+- **`air`**: air blocks in the schematic also overwrite the world (useful for clearing the area).
+  Without it, air is skipped.
 
-Tambahan `air` = blok air/udara di schematic juga ikut ditimpa (buat ngosongin area). Tanpa itu, air dilewati.
+## Config
+`config/schemprinter.properties`
 
-## Catatan
-- Undo disimpan ke disk (`<world>/schemprinter_history`), jadi tetap bisa setelah game ditutup. Default 10 operasi terakhir (`history_limit`).
-- Undo balikin BLOK (blockstate). Isi chest, teks sign, dan data block entity lain TIDAK disimpan/dibalikin.
-- Entity (mob, item) gak disentuh. Block entity dari schematic (isi chest dsb.) juga gak ikut dipaste.
-- Posisi: dasar patung sejajar kaki lo, tengah-tengah di depan lo.
+| Key | Default | Description |
+|---|---|---|
+| `blocks_per_tick` | `40` | Print speed (20 ticks = 1 second) |
+| `distance` | `3` | Distance between you and the build |
+| `face` | `south` | Front side of the schematic |
+| `history_limit` | `10` | Number of operations that can be undone |
+| `schematics_dir` | `schematics` | Schematics folder (relative to the game folder, or an absolute path) |
+
+## Notes
+- The build's base is level with your feet, centered in front of you.
+- Undo history is stored in `<world>/schemprinter_history`.
+- Undo restores blocks (block states) only. Chest contents, sign text and other block entity data are not saved or restored.
+- Entities (mobs, items) are not touched. Block entity data from the schematic (chest contents, etc.) is not pasted.
+
+## Building from source
+Requires JDK 25.
+
+```
+./gradlew build
+```
+
+Output: `build/libs/schem-printer-2.0.0.jar` (not the `-sources` one).
+
+## License
+MIT
