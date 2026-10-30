@@ -10,12 +10,12 @@ Butuh JDK 25.
    https://fabricmc.net/develop/template/ (pilih Minecraft 26.3), lalu copy `gradlew`, `gradlew.bat`,
    dan folder `gradle/` dari template ke folder ini. (Atau: `gradle wrapper --gradle-version 9.6.0`)
 2. `./gradlew build`
-3. Hasilnya: `build/libs/schem-printer-1.0.0.jar` (BUKAN yang `-sources`).
+3. Hasilnya: `build/libs/schem-printer-2.0.0.jar` (BUKAN yang `-sources`).
 
 Kalau Gradle protes soal versi plugin/Loom, samain `gradle.properties` dan `build.gradle` dengan template resmi 26.3.
 
 ## Pasang
-- Fabric Loader 0.19.5+, Fabric API `0.161.0+26.3`, lalu taruh `schem-printer-1.0.0.jar` di folder `mods`.
+- Fabric Loader 0.19.5+, Fabric API `0.161.0+26.3`, lalu taruh `schem-printer-2.0.0.jar` di folder `mods`.
 - Taruh file `.schem` di `<folder game>/schematics/` (`.minecraft/schematics`).
   Mau pakai folder lain (misal folder WorldEdit)? Ubah `schematics_dir` di `config/schemprinter.properties`.
 
