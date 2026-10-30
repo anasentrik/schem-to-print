@@ -25,6 +25,8 @@ Watch it "3D-print" block by block, or paste it instantly. Pause, resume, and **
 Supported format: Sponge Schematic v2 / v3 (`.schem`, as exported by WorldEdit).
 
 ## Commands
+Requires cheats enabled (singleplayer) or OP (server), same as `/fill` and `/setblock`.
+
 | Command | Description |
 |---|---|
 | `/schem list` | List available schematics |

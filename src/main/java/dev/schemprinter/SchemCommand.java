@@ -19,7 +19,9 @@ final class SchemCommand {
     private SchemCommand() {}
 
     static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("schem");
+        // level 2 (sama kayak /fill, /setblock): singleplayer butuh cheat aktif, server cuma OP
+        LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("schem")
+                .requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS));
 
         root.then(Commands.literal("list").executes(c -> Manager.list(c.getSource())));
 
