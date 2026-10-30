@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "schemprinter",
+  "version": "${version}",
+  "name": "Schem Printer",
+  "description": "Paste / 3D-print file .schem langsung di depan player, dengan pause dan undo beneran.",
+  "authors": [],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["dev.schemprinter.SchemPrinterMod"]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "~26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  }
+}
